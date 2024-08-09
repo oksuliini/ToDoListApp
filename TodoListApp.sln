@@ -5,6 +5,8 @@ VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoListApp", "TodoListApp\TodoListApp.csproj", "{A3E6DC2E-6A09-4EAD-A83A-863E8826E9F6}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "TodoListAppSetup", "TodoListAppSetup\TodoListAppSetup.vdproj", "{18357174-9052-444D-97E4-3442C62C8816}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{A3E6DC2E-6A09-4EAD-A83A-863E8826E9F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3E6DC2E-6A09-4EAD-A83A-863E8826E9F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3E6DC2E-6A09-4EAD-A83A-863E8826E9F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18357174-9052-444D-97E4-3442C62C8816}.Debug|Any CPU.ActiveCfg = Debug
+		{18357174-9052-444D-97E4-3442C62C8816}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
