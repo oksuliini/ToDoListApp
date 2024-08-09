@@ -35,10 +35,12 @@ Seuraamalla näitä ohjeita pääset alkuun TodoListAppin kanssa:
 
 ### Kuvakaappaukset
 
-![images](screenshot.png)
+![1](https://github.com/user-attachments/assets/1c4a57c8-5eda-48e9-b69e-399ab8942ed6)
+
 *Pääikkuna, jossa näkyvät tehtävät ja tehtävien hallintavaihtoehdot.*
 
-![Lisää Tehtävä -ikkuna](images/screenshot1.png)
+![screenshot1](https://github.com/user-attachments/assets/61e4e6b8-8b66-4c7e-af9a-c579b91deaee)
+
 *Tehtävän lisäys -ikkuna uusien tehtävien luomista varten.*
 
 ![screenshot3](https://github.com/user-attachments/assets/88cb9b57-ef31-47e4-874a-56582da5e659)
@@ -110,5 +112,3 @@ Suunnitteilla on järjestelmäilmoituksia tulevista määräajoista ja muistutuk
 ## Mobiilisovellus
 Kehitämme sovelluksesta mobiiliversion, joka mahdollistaa tehtävien hallinnan myös liikkeellä ollessa ja tarjoaa synkronoinnin eri laitteiden välillä.
 
-
-![image](https://github.com/user-attachments/assets/550fab6b-be49-4768-ad75-3800ba71fdb8)
