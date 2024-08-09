@@ -9,8 +9,10 @@ namespace TodoListApp
 {
     public partial class Form1 : Form
     {
+        // Lista, joka pitää kirjaa kaikista tehtävistä
         private List<ColoredListBoxItem> originalTaskList = new List<ColoredListBoxItem>();
 
+        // Muodostaja, joka alustaa lomakkeen ja lataa tehtävät
         public Form1()
         {
             InitializeComponent();
@@ -20,21 +22,24 @@ namespace TodoListApp
             LoadTasks(); // Lataa tehtävät sovelluksen käynnistyessä
         }
 
+        // Alustaa tehtävälistan ListBoxin piirtämistavan
         private void InitializeTaskListBox()
         {
             taskListBox.DrawMode = DrawMode.OwnerDrawFixed;
             taskListBox.ItemHeight = 20;
-            taskListBox.DrawItem += taskListBox_DrawItem;
+            taskListBox.DrawItem += TaskListBox_DrawItem;
         }
 
+        // Alustaa suodatinvalikon
         private void InitializeFilterComboBox()
         {
             filterComboBox.Items.AddRange(new string[] { "All", "High", "Medium", "Low", "Completed" });
             filterComboBox.SelectedIndex = 0;
-            filterComboBox.SelectedIndexChanged += filterComboBox_SelectedIndexChanged;
+            filterComboBox.SelectedIndexChanged += FilterComboBox_SelectedIndexChanged;
         }
 
-        private void addTaskButton_Click(object sender, EventArgs e)
+        // Lisää uuden tehtävän tehtävälistaan
+        private void AddTaskButton_Click(object sender, EventArgs e)
         {
             string task = taskTextBox.Text.Trim();
             string priority = priorityComboBox.SelectedItem?.ToString() ?? "Low";
@@ -45,7 +50,7 @@ namespace TodoListApp
                 {
                     Text = $"{task} - Priority: {priority} - Deadline: {deadline}"
                 };
-                SetTaskColor(coloredItem);
+                SetTaskColor(coloredItem, false);
                 originalTaskList.Add(coloredItem);
                 SortTasksByPriority();
                 ApplyFilter(filterComboBox.SelectedItem.ToString());
@@ -55,7 +60,8 @@ namespace TodoListApp
             }
         }
 
-        private void removeTaskButton_Click(object sender, EventArgs e)
+        // Poistaa valitun tehtävän tehtävälistasta
+        private void RemoveTaskButton_Click(object sender, EventArgs e)
         {
             if (taskListBox.SelectedItem != null)
             {
@@ -66,6 +72,7 @@ namespace TodoListApp
             }
         }
 
+        // Poistaa tehtävän tiedostosta
         private void RemoveTaskFromFile(string taskToRemove)
         {
             string filePath = "tasks.txt";
@@ -77,19 +84,21 @@ namespace TodoListApp
             }
         }
 
-        private void markAsDoneButton_Click(object sender, EventArgs e)
+        // Merkitsee valitun tehtävän suoritetuksi
+        private void MarkAsDoneButton_Click(object sender, EventArgs e)
         {
             if (taskListBox.SelectedItem != null)
             {
                 var selectedColoredItem = (ColoredListBoxItem)taskListBox.SelectedItem;
                 var originalTaskText = selectedColoredItem.Text.Split('-')[0].Trim();
                 selectedColoredItem.Text = $"{originalTaskText} - Completed on: {DateTime.Now.ToShortDateString()}";
-                SetTaskColor(selectedColoredItem);
+                SetTaskColor(selectedColoredItem, true);
                 SortTasks();
             }
         }
 
-        private void saveButton_Click(object sender, EventArgs e)
+        // Tallentaa tehtävät tiedostoon
+        private void SaveButton_Click(object sender, EventArgs e)
         {
             using (StreamWriter writer = new StreamWriter("tasks.txt"))
             {
@@ -100,6 +109,7 @@ namespace TodoListApp
             }
         }
 
+        // Lataa tehtävät tiedostosta
         private void LoadTasks()
         {
             if (File.Exists("tasks.txt"))
@@ -115,7 +125,7 @@ namespace TodoListApp
                         {
                             Text = line
                         };
-                        SetTaskColor(coloredItem);
+                        SetTaskColor(coloredItem, line.Contains("Completed on:"));
                         originalTaskList.Add(coloredItem);
                     }
                 }
@@ -124,7 +134,8 @@ namespace TodoListApp
             }
         }
 
-        private void reminderTimer_Tick(object sender, EventArgs e)
+        // Tarkistaa tehtävien määräajat ja näyttää muistutuksia
+        private void ReminderTimer_Tick(object sender, EventArgs e)
         {
             foreach (ColoredListBoxItem item in taskListBox.Items)
             {
@@ -145,11 +156,12 @@ namespace TodoListApp
             }
         }
 
-        private void SetTaskColor(ColoredListBoxItem item)
+        // Asettaa tehtävän värin sen tilan mukaan
+        private void SetTaskColor(ColoredListBoxItem item, bool isDone)
         {
-            if (item.Text.Contains("Completed on:"))
+            if (isDone || item.Text.Contains("Completed on:"))
             {
-                item.Color = Color.Green; // Completed tehtävät
+                item.Color = Color.Green;
             }
             else if (item.Text.Contains("High"))
             {
@@ -169,6 +181,7 @@ namespace TodoListApp
             }
         }
 
+        // Järjestää tehtävät erikseen suoritetut ja suorittamattomat
         private void SortTasks()
         {
             var tasks = new List<ColoredListBoxItem>();
@@ -199,6 +212,7 @@ namespace TodoListApp
             }
         }
 
+        // Järjestää tehtävät prioriteetin ja määräajan mukaan
         private void SortTasksByPriority()
         {
             originalTaskList = originalTaskList
@@ -207,6 +221,7 @@ namespace TodoListApp
                 .ToList();
         }
 
+        // Hakee tehtävän prioriteetinarvon
         private int GetPriorityValue(string taskText)
         {
             if (taskText.Contains("High")) return 3;
@@ -215,6 +230,7 @@ namespace TodoListApp
             return 0;
         }
 
+        // Hakee tehtävän määräajan
         private DateTime GetDeadline(string taskText)
         {
             var parts = taskText.Split('-');
@@ -226,6 +242,7 @@ namespace TodoListApp
             return DateTime.MaxValue;
         }
 
+        // Soveltaa suodattimen valitun prioriteetin mukaan
         private void ApplyFilter(string priority)
         {
             taskListBox.Items.Clear();
@@ -243,12 +260,14 @@ namespace TodoListApp
             }
         }
 
-        private void filterComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        // Suodatinvalikon muuttaminen vaikuttaa tehtävälistaan
+        private void FilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             ApplyFilter(filterComboBox.SelectedItem?.ToString());
         }
 
-        private void taskListBox_DrawItem(object sender, DrawItemEventArgs e)
+        // Piirtää tehtävälistan kohteet ListBoxiin
+        private void TaskListBox_DrawItem(object sender, DrawItemEventArgs e)
         {
             e.DrawBackground();
             var listBox = sender as ListBox;
@@ -267,7 +286,8 @@ namespace TodoListApp
             e.DrawFocusRectangle();
         }
 
-        private void editTaskButton_Click(object sender, EventArgs e)
+        // Avaa lomake tehtävän muokkaamista varten
+        private void EditTaskButton_Click(object sender, EventArgs e)
         {
             if (taskListBox.SelectedItem != null)
             {
@@ -287,6 +307,7 @@ namespace TodoListApp
             }
         }
 
+        // Avaa muokkauslomakkeen tehtävän muokkaamista varten
         private void OpenEditTaskForm(ColoredListBoxItem item)
         {
             string[] parts = item.Text.Split('-');
@@ -300,13 +321,13 @@ namespace TodoListApp
                 if (editForm.ShowDialog() == DialogResult.OK)
                 {
                     item.Text = $"{editForm.TaskName} - Priority: {editForm.Priority} - Deadline: {editForm.Deadline.ToShortDateString()}";
-                    SetTaskColor(item);
+                    SetTaskColor(item, false);
 
-                    // Poista muokattu tehtävä listalta ja lisää se takaisin alkuperäiseen listaan
+                    // Poistaa muokattavan tehtävän alkuperäisestä listasta ja lisää sen takaisin
                     originalTaskList.Remove(item);
                     originalTaskList.Add(item);
 
-                    // Järjestä tehtävät uudelleen
+                    // Järjestää tehtävät uudelleen
                     SortTasksByPriority();
                     ApplyFilter(filterComboBox.SelectedItem.ToString());
 
@@ -316,11 +337,13 @@ namespace TodoListApp
         }
     }
 
+    // Luokka tehtävän kuvaamiseksi ListBoxissa
     public class ColoredListBoxItem
     {
         public string Text { get; set; }
         public Color Color { get; set; }
 
+        // Muodostaa kohteen merkkijonona
         public override string ToString()
         {
             return Text;

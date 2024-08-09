@@ -57,7 +57,7 @@
             this.addTaskButton.TabIndex = 1;
             this.addTaskButton.Text = "Add Task";
             this.addTaskButton.UseVisualStyleBackColor = true;
-            this.addTaskButton.Click += new System.EventHandler(this.addTaskButton_Click);
+            this.addTaskButton.Click += new System.EventHandler(this.AddTaskButton_Click);
             // 
             // taskListBox
             // 
@@ -75,7 +75,7 @@
             this.removeTaskButton.TabIndex = 3;
             this.removeTaskButton.Text = "Remove Task";
             this.removeTaskButton.UseVisualStyleBackColor = true;
-            this.removeTaskButton.Click += new System.EventHandler(this.removeTaskButton_Click);
+            this.removeTaskButton.Click += new System.EventHandler(this.RemoveTaskButton_Click);
             // 
             // markAsDoneButton
             // 
@@ -85,7 +85,7 @@
             this.markAsDoneButton.TabIndex = 4;
             this.markAsDoneButton.Text = "Mark as Done";
             this.markAsDoneButton.UseVisualStyleBackColor = true;
-            this.markAsDoneButton.Click += new System.EventHandler(this.markAsDoneButton_Click);
+            this.markAsDoneButton.Click += new System.EventHandler(this.MarkAsDoneButton_Click);
             // 
             // saveButton
             // 
@@ -95,7 +95,7 @@
             this.saveButton.TabIndex = 5;
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = true;
-            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            this.saveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
             // priorityComboBox
             // 
@@ -129,7 +129,7 @@
             this.editTaskButton.TabIndex = 9;
             this.editTaskButton.Text = "Edit";
             this.editTaskButton.UseVisualStyleBackColor = true;
-            this.editTaskButton.Click += new System.EventHandler(this.editTaskButton_Click);
+            this.editTaskButton.Click += new System.EventHandler(this.EditTaskButton_Click);
             // 
             // filterComboBox
             // 
