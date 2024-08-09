@@ -50,7 +50,8 @@ Seuraamalla näitä ohjeita pääset alkuun TodoListAppin kanssa:
 
 Alla oleva vuokaavio havainnollistaa TodoListAppin pääprosessivirran:
 
-![Vuokaavio](diagrams/flowchart.png)
+![image](https://github.com/user-attachments/assets/bb85813f-dc6e-451c-a8cd-fed953b29437)
+
 
 ## Koodin Pääkohdat
 
