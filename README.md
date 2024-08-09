@@ -35,13 +35,13 @@ Seuraamalla näitä ohjeita pääset alkuun TodoListAppin kanssa:
 
 ### Kuvakaappaukset
 
-![Pääikkuna](screenshots/main_window.png)
+![Pääikkuna](.png)
 *Pääikkuna, jossa näkyvät tehtävät ja tehtävien hallintavaihtoehdot.*
 
-![Lisää Tehtävä -ikkuna](screenshots/add_task.png)
+![Lisää Tehtävä -ikkuna](images/screenshot1.png)
 *Tehtävän lisäys -ikkuna uusien tehtävien luomista varten.*
 
-![Muokkaa Tehtävä -ikkuna](screenshots/edit_task.png)
+![Muokkaa Tehtävä -ikkuna](images/screenshot3.png)
 *Tehtävän muokkaus -ikkuna olemassa olevien tehtävien muokkaamista varten.*
 
 ### Vuokaavio
