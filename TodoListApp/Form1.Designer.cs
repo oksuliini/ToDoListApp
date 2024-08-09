@@ -39,6 +39,7 @@
             this.priorityComboBox = new System.Windows.Forms.ComboBox();
             this.deadlinePicker = new System.Windows.Forms.DateTimePicker();
             this.reminderTimer = new System.Windows.Forms.Timer(this.components);
+            this.editTaskButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // taskTextBox
@@ -50,9 +51,9 @@
             // 
             // addTaskButton
             // 
-            this.addTaskButton.Location = new System.Drawing.Point(156, 114);
+            this.addTaskButton.Location = new System.Drawing.Point(154, 114);
             this.addTaskButton.Name = "addTaskButton";
-            this.addTaskButton.Size = new System.Drawing.Size(84, 23);
+            this.addTaskButton.Size = new System.Drawing.Size(86, 23);
             this.addTaskButton.TabIndex = 1;
             this.addTaskButton.Text = "Add Task";
             this.addTaskButton.UseVisualStyleBackColor = true;
@@ -63,14 +64,14 @@
             this.taskListBox.FormattingEnabled = true;
             this.taskListBox.Location = new System.Drawing.Point(259, 35);
             this.taskListBox.Name = "taskListBox";
-            this.taskListBox.Size = new System.Drawing.Size(269, 186);
+            this.taskListBox.Size = new System.Drawing.Size(312, 212);
             this.taskListBox.TabIndex = 2;
             // 
             // removeTaskButton
             // 
-            this.removeTaskButton.Location = new System.Drawing.Point(156, 155);
+            this.removeTaskButton.Location = new System.Drawing.Point(154, 206);
             this.removeTaskButton.Name = "removeTaskButton";
-            this.removeTaskButton.Size = new System.Drawing.Size(84, 23);
+            this.removeTaskButton.Size = new System.Drawing.Size(85, 23);
             this.removeTaskButton.TabIndex = 3;
             this.removeTaskButton.Text = "Remove Task";
             this.removeTaskButton.UseVisualStyleBackColor = true;
@@ -78,7 +79,7 @@
             // 
             // markAsDoneButton
             // 
-            this.markAsDoneButton.Location = new System.Drawing.Point(155, 198);
+            this.markAsDoneButton.Location = new System.Drawing.Point(154, 249);
             this.markAsDoneButton.Name = "markAsDoneButton";
             this.markAsDoneButton.Size = new System.Drawing.Size(85, 23);
             this.markAsDoneButton.TabIndex = 4;
@@ -88,7 +89,7 @@
             // 
             // saveButton
             // 
-            this.saveButton.Location = new System.Drawing.Point(259, 227);
+            this.saveButton.Location = new System.Drawing.Point(259, 249);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(84, 23);
             this.saveButton.TabIndex = 5;
@@ -98,7 +99,7 @@
             // 
             // loadButton
             // 
-            this.loadButton.Location = new System.Drawing.Point(349, 227);
+            this.loadButton.Location = new System.Drawing.Point(349, 249);
             this.loadButton.Name = "loadButton";
             this.loadButton.Size = new System.Drawing.Size(85, 23);
             this.loadButton.TabIndex = 6;
@@ -130,11 +131,22 @@
             // 
             this.reminderTimer.Interval = 86400000;
             // 
+            // editTaskButton
+            // 
+            this.editTaskButton.Location = new System.Drawing.Point(154, 160);
+            this.editTaskButton.Name = "editTaskButton";
+            this.editTaskButton.Size = new System.Drawing.Size(86, 23);
+            this.editTaskButton.TabIndex = 9;
+            this.editTaskButton.Text = "Edit";
+            this.editTaskButton.UseVisualStyleBackColor = true;
+            this.editTaskButton.Click += new System.EventHandler(this.editTaskButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(562, 361);
+            this.ClientSize = new System.Drawing.Size(583, 387);
+            this.Controls.Add(this.editTaskButton);
             this.Controls.Add(this.deadlinePicker);
             this.Controls.Add(this.priorityComboBox);
             this.Controls.Add(this.loadButton);
@@ -163,6 +175,7 @@
         private System.Windows.Forms.ComboBox priorityComboBox;
         private System.Windows.Forms.DateTimePicker deadlinePicker;
         private System.Windows.Forms.Timer reminderTimer;
+        private System.Windows.Forms.Button editTaskButton;
     }
 }
 

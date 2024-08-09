@@ -206,6 +206,41 @@ namespace TodoListApp
             }
             e.DrawFocusRectangle();
         }
+
+        private void editTaskButton_Click(object sender, EventArgs e)
+        {
+            if (taskListBox.SelectedItem != null)
+            {
+                var selectedItem = (ColoredListBoxItem)taskListBox.SelectedItem;
+                OpenEditTaskForm(selectedItem);
+            }
+            else
+            {
+                MessageBox.Show("Please select a task to edit.");
+            }
+        }
+        private void OpenEditTaskForm(ColoredListBoxItem item)
+        {
+            // Oletetaan, että tekstin formaatti on "TaskName - Priority: [Priority] - Deadline: [Deadline]"
+            string[] parts = item.Text.Split('-');
+            string taskName = parts[0].Trim();
+            string priorityPart = parts.FirstOrDefault(p => p.Contains("Priority:"))?.Replace("Priority:", "").Trim();
+            string deadlinePart = parts.FirstOrDefault(p => p.Contains("Deadline:"))?.Replace("Deadline:", "").Trim();
+            DateTime deadline = DateTime.Parse(deadlinePart);
+
+            using (var editForm = new EditTaskForm(taskName, priorityPart, deadline))
+            {
+                if (editForm.ShowDialog() == DialogResult.OK)
+                {
+                    // Päivitetään tehtävä uusilla arvoilla
+                    item.Text = $"{editForm.TaskName} - Priority: {editForm.Priority} - Deadline: {editForm.Deadline.ToShortDateString()}";
+                    SetTaskColor(item, false);
+                    taskListBox.Refresh(); // Päivitetään ListBox näkymä
+                }
+            }
+        }
+
+
     }
 
     public class ColoredListBoxItem
