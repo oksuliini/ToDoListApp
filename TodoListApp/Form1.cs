@@ -9,18 +9,29 @@ namespace TodoListApp
 {
     public partial class Form1 : Form
     {
+        private List<ColoredListBoxItem> originalTaskList = new List<ColoredListBoxItem>();
+
         public Form1()
         {
             InitializeComponent();
             InitializeTaskListBox();
+            InitializeFilterComboBox();
             reminderTimer.Start();
+            LoadTasks(); // Lataa tehtävät sovelluksen käynnistyessä
         }
 
         private void InitializeTaskListBox()
         {
-            taskListBox.DrawMode = DrawMode.OwnerDrawFixed; // Asetetaan piirtotila omistajan piirtämäksi kiinteäksi
-            taskListBox.ItemHeight = 20; // Asetetaan ListBox-kohteiden korkeus
-            taskListBox.DrawItem += taskListBox_DrawItem; // Kytketään DrawItem-tapahtuma käsittelijään
+            taskListBox.DrawMode = DrawMode.OwnerDrawFixed;
+            taskListBox.ItemHeight = 20;
+            taskListBox.DrawItem += taskListBox_DrawItem;
+        }
+
+        private void InitializeFilterComboBox()
+        {
+            filterComboBox.Items.AddRange(new string[] { "All", "High", "Medium", "Low", "Completed" });
+            filterComboBox.SelectedIndex = 0;
+            filterComboBox.SelectedIndexChanged += filterComboBox_SelectedIndexChanged;
         }
 
         private void addTaskButton_Click(object sender, EventArgs e)
@@ -34,9 +45,10 @@ namespace TodoListApp
                 {
                     Text = $"{task} - Priority: {priority} - Deadline: {deadline}"
                 };
-                SetTaskColor(coloredItem, false); // Aseta väri vain lisättyyn tehtävään
-                taskListBox.Items.Add(coloredItem);
-                SortTasks();
+                SetTaskColor(coloredItem);
+                originalTaskList.Add(coloredItem);
+                SortTasksByPriority();
+                ApplyFilter(filterComboBox.SelectedItem.ToString());
                 taskTextBox.Clear();
                 priorityComboBox.SelectedIndex = -1;
                 deadlinePicker.Value = DateTime.Now;
@@ -49,7 +61,8 @@ namespace TodoListApp
             {
                 var selectedItem = (ColoredListBoxItem)taskListBox.SelectedItem;
                 taskListBox.Items.Remove(selectedItem);
-                RemoveTaskFromFile(selectedItem.Text); // Poistetaan tehtävä myös tiedostosta
+                originalTaskList.Remove(selectedItem);
+                RemoveTaskFromFile(selectedItem.Text);
             }
         }
 
@@ -71,7 +84,7 @@ namespace TodoListApp
                 var selectedColoredItem = (ColoredListBoxItem)taskListBox.SelectedItem;
                 var originalTaskText = selectedColoredItem.Text.Split('-')[0].Trim();
                 selectedColoredItem.Text = $"{originalTaskText} - Completed on: {DateTime.Now.ToShortDateString()}";
-                SetTaskColor(selectedColoredItem, true); // Aseta väri merkitylle tehtävälle
+                SetTaskColor(selectedColoredItem);
                 SortTasks();
             }
         }
@@ -80,18 +93,19 @@ namespace TodoListApp
         {
             using (StreamWriter writer = new StreamWriter("tasks.txt"))
             {
-                foreach (ColoredListBoxItem item in taskListBox.Items)
+                foreach (ColoredListBoxItem item in originalTaskList)
                 {
                     writer.WriteLine(item.Text);
                 }
             }
         }
 
-        private void loadButton_Click(object sender, EventArgs e)
+        private void LoadTasks()
         {
             if (File.Exists("tasks.txt"))
             {
                 taskListBox.Items.Clear();
+                originalTaskList.Clear();
                 using (StreamReader reader = new StreamReader("tasks.txt"))
                 {
                     string line;
@@ -101,15 +115,12 @@ namespace TodoListApp
                         {
                             Text = line
                         };
-                        SetTaskColor(coloredItem, false); // Aseta väri vain ladattuun tehtävään
-                        taskListBox.Items.Add(coloredItem);
+                        SetTaskColor(coloredItem);
+                        originalTaskList.Add(coloredItem);
                     }
                 }
-                SortTasks();
-            }
-            else
-            {
-                MessageBox.Show("No saved tasks found.");
+                SortTasksByPriority();
+                ApplyFilter(filterComboBox.SelectedItem.ToString());
             }
         }
 
@@ -134,27 +145,27 @@ namespace TodoListApp
             }
         }
 
-        private void SetTaskColor(ColoredListBoxItem item, bool isDone)
+        private void SetTaskColor(ColoredListBoxItem item)
         {
-            if (isDone)
+            if (item.Text.Contains("Completed on:"))
             {
-                item.Color = Color.Green; // Vihreä väri, kun tehtävä on tehty
+                item.Color = Color.Green; // Completed tehtävät
             }
             else if (item.Text.Contains("High"))
             {
-                item.Color = Color.Red; // Punainen väri, kun tehtävän kiireisyys on korkea
+                item.Color = Color.Red;
             }
             else if (item.Text.Contains("Medium"))
             {
-                item.Color = Color.Orange; // Oranssi väri, kun tehtävän kiireisyys on keskitaso
+                item.Color = Color.Orange;
             }
             else if (item.Text.Contains("Low"))
             {
-                item.Color = Color.LightBlue; // Vaaleansininen väri, kun tehtävän kiireisyys on matala
+                item.Color = Color.LightBlue;
             }
             else
             {
-                item.Color = Color.Black; // Oletusväri muille tehtäville
+                item.Color = Color.Black;
             }
         }
 
@@ -163,7 +174,7 @@ namespace TodoListApp
             var tasks = new List<ColoredListBoxItem>();
             var doneTasks = new List<ColoredListBoxItem>();
 
-            foreach (ColoredListBoxItem item in taskListBox.Items)
+            foreach (ColoredListBoxItem item in originalTaskList)
             {
                 if (item.Text.Contains("Completed on:"))
                 {
@@ -186,6 +197,55 @@ namespace TodoListApp
             {
                 taskListBox.Items.Add(doneTask);
             }
+        }
+
+        private void SortTasksByPriority()
+        {
+            originalTaskList = originalTaskList
+                .OrderByDescending(item => GetPriorityValue(item.Text))
+                .ThenBy(item => GetDeadline(item.Text))
+                .ToList();
+        }
+
+        private int GetPriorityValue(string taskText)
+        {
+            if (taskText.Contains("High")) return 3;
+            if (taskText.Contains("Medium")) return 2;
+            if (taskText.Contains("Low")) return 1;
+            return 0;
+        }
+
+        private DateTime GetDeadline(string taskText)
+        {
+            var parts = taskText.Split('-');
+            var deadlinePart = parts.FirstOrDefault(p => p.Contains("Deadline:"))?.Replace("Deadline:", "").Trim();
+            if (DateTime.TryParse(deadlinePart, out DateTime deadline))
+            {
+                return deadline;
+            }
+            return DateTime.MaxValue;
+        }
+
+        private void ApplyFilter(string priority)
+        {
+            taskListBox.Items.Clear();
+
+            foreach (var item in originalTaskList)
+            {
+                if (priority == "All" || item.Text.Contains($"Priority: {priority}"))
+                {
+                    taskListBox.Items.Add(item);
+                }
+                else if (priority == "Completed" && item.Text.Contains("Completed on:"))
+                {
+                    taskListBox.Items.Add(item);
+                }
+            }
+        }
+
+        private void filterComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ApplyFilter(filterComboBox.SelectedItem?.ToString());
         }
 
         private void taskListBox_DrawItem(object sender, DrawItemEventArgs e)
@@ -212,16 +272,23 @@ namespace TodoListApp
             if (taskListBox.SelectedItem != null)
             {
                 var selectedItem = (ColoredListBoxItem)taskListBox.SelectedItem;
-                OpenEditTaskForm(selectedItem);
+                if (selectedItem.Text.Contains("Completed on:"))
+                {
+                    MessageBox.Show("Completed tasks cannot be edited.", "Edit Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    OpenEditTaskForm(selectedItem);
+                }
             }
             else
             {
                 MessageBox.Show("Please select a task to edit.");
             }
         }
+
         private void OpenEditTaskForm(ColoredListBoxItem item)
         {
-            // Oletetaan, että tekstin formaatti on "TaskName - Priority: [Priority] - Deadline: [Deadline]"
             string[] parts = item.Text.Split('-');
             string taskName = parts[0].Trim();
             string priorityPart = parts.FirstOrDefault(p => p.Contains("Priority:"))?.Replace("Priority:", "").Trim();
@@ -232,15 +299,21 @@ namespace TodoListApp
             {
                 if (editForm.ShowDialog() == DialogResult.OK)
                 {
-                    // Päivitetään tehtävä uusilla arvoilla
                     item.Text = $"{editForm.TaskName} - Priority: {editForm.Priority} - Deadline: {editForm.Deadline.ToShortDateString()}";
-                    SetTaskColor(item, false);
+                    SetTaskColor(item);
+
+                    // Poista muokattu tehtävä listalta ja lisää se takaisin alkuperäiseen listaan
+                    originalTaskList.Remove(item);
+                    originalTaskList.Add(item);
+
+                    // Järjestä tehtävät uudelleen
+                    SortTasksByPriority();
+                    ApplyFilter(filterComboBox.SelectedItem.ToString());
+
                     taskListBox.Refresh(); // Päivitetään ListBox näkymä
                 }
             }
         }
-
-
     }
 
     public class ColoredListBoxItem

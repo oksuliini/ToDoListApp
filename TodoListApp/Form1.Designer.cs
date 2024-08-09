@@ -35,11 +35,11 @@
             this.removeTaskButton = new System.Windows.Forms.Button();
             this.markAsDoneButton = new System.Windows.Forms.Button();
             this.saveButton = new System.Windows.Forms.Button();
-            this.loadButton = new System.Windows.Forms.Button();
             this.priorityComboBox = new System.Windows.Forms.ComboBox();
             this.deadlinePicker = new System.Windows.Forms.DateTimePicker();
             this.reminderTimer = new System.Windows.Forms.Timer(this.components);
             this.editTaskButton = new System.Windows.Forms.Button();
+            this.filterComboBox = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // taskTextBox
@@ -64,7 +64,7 @@
             this.taskListBox.FormattingEnabled = true;
             this.taskListBox.Location = new System.Drawing.Point(259, 35);
             this.taskListBox.Name = "taskListBox";
-            this.taskListBox.Size = new System.Drawing.Size(312, 212);
+            this.taskListBox.Size = new System.Drawing.Size(413, 212);
             this.taskListBox.TabIndex = 2;
             // 
             // removeTaskButton
@@ -96,16 +96,6 @@
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
-            // 
-            // loadButton
-            // 
-            this.loadButton.Location = new System.Drawing.Point(349, 249);
-            this.loadButton.Name = "loadButton";
-            this.loadButton.Size = new System.Drawing.Size(85, 23);
-            this.loadButton.TabIndex = 6;
-            this.loadButton.Text = "Load";
-            this.loadButton.UseVisualStyleBackColor = true;
-            this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
             // 
             // priorityComboBox
             // 
@@ -141,15 +131,24 @@
             this.editTaskButton.UseVisualStyleBackColor = true;
             this.editTaskButton.Click += new System.EventHandler(this.editTaskButton_Click);
             // 
+            // filterComboBox
+            // 
+            this.filterComboBox.FormattingEnabled = true;
+            this.filterComboBox.Location = new System.Drawing.Point(49, 249);
+            this.filterComboBox.Name = "filterComboBox";
+            this.filterComboBox.Size = new System.Drawing.Size(90, 21);
+            this.filterComboBox.TabIndex = 10;
+            this.filterComboBox.Text = "Filter Tasks";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(583, 387);
+            this.ClientSize = new System.Drawing.Size(684, 387);
+            this.Controls.Add(this.filterComboBox);
             this.Controls.Add(this.editTaskButton);
             this.Controls.Add(this.deadlinePicker);
             this.Controls.Add(this.priorityComboBox);
-            this.Controls.Add(this.loadButton);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.markAsDoneButton);
             this.Controls.Add(this.removeTaskButton);
@@ -171,11 +170,11 @@
         private System.Windows.Forms.Button removeTaskButton;
         private System.Windows.Forms.Button markAsDoneButton;
         private System.Windows.Forms.Button saveButton;
-        private System.Windows.Forms.Button loadButton;
         private System.Windows.Forms.ComboBox priorityComboBox;
         private System.Windows.Forms.DateTimePicker deadlinePicker;
         private System.Windows.Forms.Timer reminderTimer;
         private System.Windows.Forms.Button editTaskButton;
+        private System.Windows.Forms.ComboBox filterComboBox;
     }
 }
 
