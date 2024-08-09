@@ -41,7 +41,7 @@ Seuraamalla näitä ohjeita pääset alkuun TodoListAppin kanssa:
 ![Lisää Tehtävä -ikkuna](images/screenshot1.png)
 *Tehtävän lisäys -ikkuna uusien tehtävien luomista varten.*
 
-![Muokkaa Tehtävä -ikkuna](images/screenshot3.png)
+![screenshot3](https://github.com/user-attachments/assets/88cb9b57-ef31-47e4-874a-56582da5e659)
 *Tehtävän muokkaus -ikkuna olemassa olevien tehtävien muokkaamista varten.*
 
 ### Vuokaavio
