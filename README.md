@@ -35,7 +35,7 @@ Seuraamalla näitä ohjeita pääset alkuun TodoListAppin kanssa:
 
 ### Kuvakaappaukset
 
-![Pääikkuna](.png)
+![images](screenshot.png)
 *Pääikkuna, jossa näkyvät tehtävät ja tehtävien hallintavaihtoehdot.*
 
 ![Lisää Tehtävä -ikkuna](images/screenshot1.png)
